@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<title>editor</title>
@@ -12,7 +12,7 @@
 <body class="both">
 	
 <div id="buttonbar">
-	<button style="float:right" onclick="window.open('help/help.html','help')" title="show Help"><i class="icon-question-sign"></i></button>
+	<button style="float:right" onclick="window.open('help','help')" title="show Help"><i class="icon-question-sign"></i></button>
 	<button onclick="set('# ','\n')" title="format Heading 1"><b>H1</b></button>
 	<button onclick="set('## ','\n')" title="format Heading 2"><b>H2</b></button>
 	<button onclick="set('### ','\n')" title="format Heading 3"><b>H3</b></button>
@@ -23,7 +23,7 @@
 	<button onclick="set('    ','')" title="indent 4 Spaces"><i class="icon-indent-right"></i></button>
 	<button onclick="set('','', true)" title="remove Formatting"><i class="icon-ban-circle"></i></button>
 	|
-	<button onclick="transfer()" title="parse Markdown"><i class="icon-retweet"></i></button>
+	<button onclick="transfer(true)" title="parse Markdown"><i class="icon-retweet"></i></button>
 	|
 	<button onclick="toggle('both')" title="dual-column-Mode"><i class="icon-columns"></i></button>
 	<button onclick="toggle('editor')" title="editing-Mode"><i class="icon-edit"></i></button>

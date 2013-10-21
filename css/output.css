@@ -1,12 +1,25 @@
 
+#output {
+	font-size: .9em;
+}
 
+#output .icon-comment {
+	cursor: pointer;
+	color: #aaa;
+}
 
 .footnotes{
 	font-size: .8em;
 }
 
+pre {
+	margin-left: 2em;
+	padding: 1em;
+	border: 1px dashed #ccc;
+}
+
 .comment {
-	position:relative;
+	position: relative;
 	font-size: .8em;
 	color: #c33;
 }

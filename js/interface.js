@@ -5,18 +5,24 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
-var height =	("innerHeight" in window 
-				? window.innerHeight
-				: document.documentElement.offsetHeight)-40,
-	mee_i = document.getElementById('input'),
+var mee_i = document.getElementById('input'),
 	mee_o = document.getElementById('output'),
-	live = (document.body.className=='both'),
-	sc = true,
-	shft = false;
-	
-mee_i.style.height = (height-20)+'px';
-mee_o.style.height = (height-20)+'px';
+	live = (document.body.className=='both'),// auto-transcode
+	sc = true,// show comments
+	ctrl = false;// ctrl was pressed
 
+function init()
+{
+	height =	("innerHeight" in window 
+				? window.innerHeight
+				: document.documentElement.offsetHeight)-40;
+	mee_i.style.height = (height-20)+'px';
+	mee_o.style.height = (height-20)+'px';
+}
+init();
+window.onresize = init;
+
+// toggle split-screen
 function toggle(to)
 {
 	document.body.className = to;
@@ -24,7 +30,7 @@ function toggle(to)
 	if (to=='preview') buildToc();
 }
 
-// inspired by: http://www.quirksmode.org/js/contents.html
+// create table of contents inspired by: http://www.quirksmode.org/js/contents.html
 function buildToc()
 {
 	
@@ -71,23 +77,13 @@ function buildToc()
 				tmp.href = '#' + headerId;
 				res[i].id = headerId;
 		}
-		//alert(y.innerHTML);
 		mee_o.appendChild(y);
 	}
 }
 
 
-function delayTimer()
-{
-	var timer;
-	return function(fun, time)
-	{
-		clearTimeout(timer);
-		timer = setTimeout(fun, time);
-	};
-};
-var delayFunction = delayTimer();
 
+// wrap formatting around selected Text
 function set(before, after, multiline)
 {
 	var s = mee_i.selectionStart, 
@@ -113,18 +109,34 @@ function set(before, after, multiline)
 	
 };
 
-function transfer()
+// delay for function transfer
+function delayTimer()
+{
+	var timer;
+	return function(fun, time)
+	{
+		clearTimeout(timer);
+		timer = setTimeout(fun, time);
+	};
+};
+var delayFunction = delayTimer();
+
+// transcode Markdown to HTML
+function transfer(enforce)
 {
 	if (!live) return;
-	var html = Markdown(mee_i.value);
-	if(sc) html = html.replace('<!--','<span class="comment icon-comment"><mee_i>').replace('-->','</mee_i></span>');
+	var v = mee_i.value;
+	// if the Text is too long we should deactivate "background-transcoding"
+	if (!enforce && v.length>10000) return;
+	var html = Markdown(v);
+	// 
+	if(sc) html = html.replace('<!--','<span class="icon-comment" title="').replace('-->','"></span>');
 	mee_o.innerHTML = html;
-	//alert(createTOC(mee_o));
 };
 
+// capture key-codes
 mee_i.onkeydown = function(e)
 {
-	// see http://darklaunch.com/2009/02/03/javascript-insert-tabs-into-textarea-insert-tabs-into-input-javascript-tab-indent
 	switch(e.keyCode)
 	{
 		case 9: // tab: insert tab
@@ -136,16 +148,16 @@ mee_i.onkeydown = function(e)
 		break;
 		case 13: // enter: check/set auto-indetation for some line-starts
 			
-			var pos = mee_i.selectionStart;
-			var l = mee_i.value.substring(0, mee_i.selectionStart).split('\n').pop();
-			var c = ['1. ','    1. ','\\* ','    \\* ','\\\t'];
+			var pos = mee_i.selectionStart,
+				l = mee_i.value.substring(0, mee_i.selectionStart).split('\n').pop(),
+				c = ['1. ','    1. ','\\* ','    \\* ','\\\t'];
 			for (var i=0,j=c.length; i<j; ++i)
 			{
 				if (l.match(eval('/^'+c[i]+'/')))
-				{i
-					var s = c[i].replace('\\','');
+				{
+					var s = c[i].replace('\\',''),
+						co = s.length+1;
 					set('\n'+s, '');
-					var co = s.length+1;
 					mee_i.setSelectionRange(pos+co, pos+co);
 					e.preventDefault();
 				}
@@ -153,22 +165,23 @@ mee_i.onkeydown = function(e)
 			
 		break;
 		case 17: // ctrl: activate listener for keys below
-			shft = true;
+			ctrl = true;
 		break;
 		default:
-			// shortcuts for buttons (only activated in combination with ctrl)
-			if (shft)
+			if (ctrl) // shortcuts for buttons (only activated in combination with ctrl)
 			{
-				if(e.keyCode==66){ set('**','**'); }
-				if(e.keyCode==73){ set('*','*'); }
+				// detect ctrl+SOMETHING: here you can add some custom checks
+				if(e.keyCode==66){ set('**','**');e.preventDefault(); }// b
+				if(e.keyCode==73){ set('*','*');e.preventDefault(); }// i
 				
-				e.preventDefault();
-				shft = false;
+				ctrl = false;
 			}
 		break;
-		
 	};
-	//alert(e.keyCode)
-	delayFunction(transfer, 500)
+	
+	// delay transfer by 1.5 sec
+	delayFunction(transfer, 1500)
 };
+
+// 
 transfer();

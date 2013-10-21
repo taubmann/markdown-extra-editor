@@ -1,0 +1,27 @@
+
+
+
+.footnotes{
+	font-size: .8em;
+}
+
+.comment {
+	position:relative;
+	font-size: .8em;
+	color: #c33;
+}
+.comment i {
+	display: none;
+}
+.comment:hover i {
+	display: block;
+	position: absolute;
+	top: 2em;
+	left: 2em;
+	width: 15em;
+	border: 1px solid #0cf;
+	background-color: #cff;
+	color: #000;
+	text-align: center;
+}
+

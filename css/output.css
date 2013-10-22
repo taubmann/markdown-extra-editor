@@ -1,6 +1,10 @@
+/**
+* Styles for the HTML-Preview
+* 
+*/
 
 #output {
-	font-size: .9em;
+	font-size: .8em;
 }
 
 #output .icon-comment {

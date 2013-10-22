@@ -1,5 +1,7 @@
 # Markdown-Extra Editor
 
+	ver. 0.6.1
+
 Based on a 
 [JavaScript port](//github.com/tanakahisateru/js-markdown-extra) 
 of 
@@ -12,10 +14,11 @@ With Support for Footnotes, Tables Abbreviations etc. Markdown-Extra is a perfec
 ### Features
 
 * Fast even on long Documents (by deactivating auto-transcoding)
-* plain Vanilla-JS (faster)
+* plain Vanilla-JS (even faster)
 * Auto-Indentation / Auto-Completition for Lists, Tabs, ... (i missed that!)
 * switchable Split-Window (Editor | HTML-Preview | both) 
 * "Table of Contents" in Preview
+* synchronized scrolling
 * HTML-Comments are shown as Tool-tip <!--i like to comment my Texts -->
 * easy extendible (simple to understand)
 

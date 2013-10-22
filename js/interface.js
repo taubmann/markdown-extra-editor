@@ -1,9 +1,12 @@
 /**	
- * Markdown-Extra Editor
- * Copyright (c) 2013 Christoph Taubmann
- * Licensed under the MIT License
- * http://www.opensource.org/licenses/mit-license.php
- */
+* Markdown-Extra Editor
+* Copyright (c) 2013 Christoph Taubmann
+* Licensed under the MIT License
+* http://www.opensource.org/licenses/mit-license.php
+*/
+
+// set the initial editor-mode ( preview, editor, both )
+document.body.className = 'both';
 
 var mee_i = document.getElementById('input'),
 	mee_o = document.getElementById('output'),
@@ -13,14 +16,19 @@ var mee_i = document.getElementById('input'),
 
 function init()
 {
-	height =	("innerHeight" in window 
-				? window.innerHeight
-				: document.documentElement.offsetHeight)-40;
-	mee_i.style.height = (height-20)+'px';
-	mee_o.style.height = (height-20)+'px';
+	var css = document.createElement('style'),
+		styles = '#input, #output { height: '+(window.innerHeight-70)+'px; width: '+((window.innerWidth/2)-15)+'px; }';
+		css.type = 'text/css';
+	if(css.styleSheet){ css.styleSheet.cssText = styles; }
+	else{ css.appendChild(document.createTextNode(styles)); }
+	document.getElementsByTagName("head")[0].appendChild(css);
 }
-init();
+
+
 window.onresize = init;
+
+// synchronize scrolling
+mee_i.onscroll = function(){ mee_o.scrollTop = mee_i.scrollTop }
 
 // toggle split-screen
 function toggle(to)
@@ -30,12 +38,19 @@ function toggle(to)
 	if (to=='preview') buildToc();
 }
 
+function toggleComments()
+{
+	sc = !sc;
+	alert('Comments are '+(sc?'activated':'deactivated'));
+	if(sc) buildToc(['span']);
+}
+
 // create table of contents inspired by: http://www.quirksmode.org/js/contents.html
-function buildToc()
+function buildToc(tags)
 {
 	
-	var tagn = ['h1','h2','h3','h4','h5'],
-		res = [];
+	var tagn = (tags ? tags : ['h1','h2','h3','h4','h5']),
+		res  = [];
 	transfer();
 	for (var i=0,j=tagn.length; i<j; ++i)
 	{
@@ -62,15 +77,16 @@ function buildToc()
 		});
 	}
 	
-	if (res.length>2)
+	if (res.length>0)
 	{
 		var y = document.createElement('div');
 			y.id = 'toc';
 			y.innerHTML = '<i onclick="this.parentNode.style.display=\'none\'" style="float:right;cursor:pointer">&otimes;</i>';
 		for (var i=0,j=res.length; i<j; ++i)
 		{
-			var tmp = document.createElement('a');
-				tmp.innerHTML = res[i].innerHTML;
+			var tmp = document.createElement('a'),
+				ih = res[i].title || res[i].innerHTML;
+				tmp.innerHTML = ih.substring(0,30);
 				y.appendChild(tmp);
 				tmp.className += ' ind'+res[i].nodeName;
 			var headerId = res[i].id || 'link' + i;
@@ -81,7 +97,24 @@ function buildToc()
 	}
 }
 
-
+function insertTable()
+{
+	var cols = prompt('how many columns do you need?','3'),
+		rows = prompt('how many rows do you need?','3');
+	var rh = [], rl = [], rb = [];
+	for (i=0,j=parseInt(cols); i<j; ++i)
+	{
+		rh.push('    Header    ');
+		rl.push('--------------');
+		rb.push(' Cell Content ');
+	}
+	var str = "\n" + rh.join('|') + "\n" + rl.join('|');
+	for (i=0,j=parseInt(rows); i<j; ++i)
+	{
+		str += "\n" + rb.join('|');
+	}
+	set('', str);
+}
 
 // wrap formatting around selected Text
 function set(before, after, multiline)
@@ -126,13 +159,24 @@ function transfer(enforce)
 {
 	if (!live) return;
 	var v = mee_i.value;
-	// if the Text is too long we should deactivate "background-transcoding"
+	if(enforce) mee_o.innerHTML = '<b>regenerate Markdown, please wait...</b>';
+	
+	// if the Text is too big we should deactivate "background-transcoding"
 	if (!enforce && v.length>10000) return;
 	var html = Markdown(v);
-	// 
-	if(sc) html = html.replace('<!--','<span class="icon-comment" title="').replace('-->','"></span>');
+	
+	// encode html-comments as bubbles
+	if(sc) html = html.replace(/<!--(.*)-->/g, '<span class="icon-comment" title="$1"></span>');
 	mee_o.innerHTML = html;
 };
+
+function showSource()
+{
+	var p = document.createElement('pre');
+		p.textContent = mee_o.innerHTML;
+	mee_o.innerHTML = '';
+	mee_o.appendChild(p);
+}
 
 // capture key-codes
 mee_i.onkeydown = function(e)
@@ -171,17 +215,22 @@ mee_i.onkeydown = function(e)
 			if (ctrl) // shortcuts for buttons (only activated in combination with ctrl)
 			{
 				// detect ctrl+SOMETHING: here you can add some custom checks
-				if(e.keyCode==66){ set('**','**');e.preventDefault(); }// b
-				if(e.keyCode==73){ set('*','*');e.preventDefault(); }// i
+				if(e.keyCode==66){ set('**','**');e.preventDefault(); }// b => bold
+				if(e.keyCode==73){ set('*','*');e.preventDefault(); }// i => italics
+				if(e.keyCode==72){ transfer(true); e.preventDefault(); }// h => regenerate HTML-Output
+				if(e.keyCode==49){ toggle('editor');e.preventDefault(); }// 1 => show Editor-Mode
+				if(e.keyCode==50){ toggle('both');e.preventDefault(); }// 2 => show Splitscreen-Mode
 				
-				ctrl = false;
+				ctrl = false; // reset ctrl-Listener
 			}
 		break;
 	};
+	// alert(e.keyCode)
 	
 	// delay transfer by 1.5 sec
 	delayFunction(transfer, 1500)
 };
 
 // 
+init();
 transfer();

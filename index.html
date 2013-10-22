@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Markdown Extra Editor</title>
+	
+	<link rel="stylesheet" type="text/css" href="font/fontawesome.css" />
+	<link rel="stylesheet" type="text/css" href="css/interface.css" />
+	<link rel="stylesheet" type="text/css" href="css/output.css" />
+	
+</head>
+<body class="no-js">
+<div id="menu">
+	<ul>
+		<li>Format
+			<ul>
+				<li onclick="set('# ','\n')" title="format Heading 1"><b>H1</b></li>
+				<li onclick="set('## ','\n')" title="format Heading 2"><b>H2</b></li>
+				<li onclick="set('### ','\n')" title="format Heading 3"><b>H3</b></li>
+				<li onclick="set('#### ','\n')" title="format Heading 4"><b>H4</b></li>
+				<li onclick="set('#### ','\n')" title="format Heading 5"><b>H5</b></li>
+			</ul>
+		</li>
+		<li onclick="set('**','**')" title="format Bold (ctrl+b)"><i class="icon-bold"></i></li>
+		<li onclick="set('*','*')" title="format Italics (ctrl+i)"><i class="icon-italic"></i></li>
+		<li onclick="set('* ','', true)" title="format as unordered List"><i class="icon-list-ul"></i></li>
+		<li onclick="set('1. ','', true)" title="format as ordered List"><i class="icon-list-ol"></i></li>
+		<li onclick="set('    ','')" title="indent 4 Spaces"><i class="icon-indent-right"></i></li>
+		<li onclick="insertTable()" title="insert Table"><i class="icon-table"></i></li>
+		<li onclick="set('','', true)" title="remove Formatting"><i class="icon-ban-circle"></i></li>
+		<li onclick="transfer(true)" title="show HTML"><i class="icon-retweet"></i></li>
+		<li onclick="showSource()" title="show Sourcecode"><i class="icon-paper-clip"></i></li>
+		<li onclick="toggleComments()" title="show/hide Comments"><i class="icon-comment"></i></li>
+		<li>View
+			<ul>
+				<li onclick="toggle('both')" title="dual-column-Mode (ctrl+2)"><i class="icon-columns"></i></li>
+				<li onclick="toggle('editor')" title="editing-Mode (ctrl+1)"><i class="icon-edit"></i></li>
+				<li onclick="toggle('preview')" title="preview-Mode"><i class="icon-eye-open"></i></li>
+				<!--<li onclick="toggle('both');buildToc(['span'])" title="show Comments"><i class="icon-comment"></i></li>-->
+			</ul>
+		</li>
+		<li onclick="window.open('help/','help')" title="show Help"><i class="icon-question-sign"></i></li>
+	</ul>
+</div>
+
+<textarea id="input" rows="30"></textarea>
+<div id="output"></div>
+
+<script src="js/js-markdown-extra.js"></script>
+<script src="js/interface.js"></script>
+
+</body>
+</html>

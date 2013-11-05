@@ -96,6 +96,11 @@ body {
 	text-align: center;
 }
 
+#menu select {
+	font-size: 1.3em;
+	min-width: 50%;
+}
+
 /* Table of Contents */
 div#toc {
 	position: fixed;

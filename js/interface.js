@@ -5,8 +5,16 @@
 * http://www.opensource.org/licenses/mit-license.php
 */
 
+
+var mee = function(id) {
+	
+}
+
+
+var touch = ('ontouchstart' in document.documentElement);
+
 // set the initial editor-mode ( preview, editor, both )
-document.body.className = 'both';
+document.body.className = touch ? 'editor' : 'both';
 
 var mee_i = document.getElementById('input'),
 	mee_o = document.getElementById('output'),
@@ -17,7 +25,7 @@ var mee_i = document.getElementById('input'),
 function init()
 {
 	var css = document.createElement('style'),
-		styles = '#input, #output { height: '+(window.innerHeight-70)+'px; width: '+((window.innerWidth/2)-15)+'px; }';
+		styles = '#input,#output{ height: '+(window.innerHeight-70)+'px; width: '+((window.innerWidth/2)-20)+'px; }';
 		css.type = 'text/css';
 	if(css.styleSheet){ css.styleSheet.cssText = styles; }
 	else{ css.appendChild(document.createTextNode(styles)); }
@@ -104,7 +112,7 @@ function insertTable()
 	var rh = [], rl = [], rb = [];
 	for (i=0,j=parseInt(cols); i<j; ++i)
 	{
-		rh.push('    Header    ');
+		rh.push('Header        ');
 		rl.push('--------------');
 		rb.push(' Cell Content ');
 	}
@@ -162,7 +170,7 @@ function transfer(enforce)
 	if(enforce) mee_o.innerHTML = '<b>regenerate Markdown, please wait...</b>';
 	
 	// if the Text is too big we should deactivate "background-transcoding"
-	if (!enforce && v.length>10000) return;
+	if (!enforce && v.length>(touch?2000:10000)) return;
 	var html = Markdown(v);
 	
 	// encode html-comments as bubbles
@@ -230,6 +238,19 @@ mee_i.onkeydown = function(e)
 	// delay transfer by 1.5 sec
 	delayFunction(transfer, 1500)
 };
+
+// replace the desktop-dropdown-menu with select
+if (touch)
+{
+	var li = document.getElementById('menu').getElementsByTagName('li'),
+		str = '<select onchange="eval(this.value);this.selectedIndex=0"><option value="">Functions</option>';
+	for (var i=0,j=li.length; i<j; ++i)
+	{
+		if(li[i].title) str += '<option value="'+li[i].getAttribute('onclick')+'">'+li[i].title+'</option>';
+	}
+		str += '</select>';
+	document.getElementById('menu').innerHTML = str;
+}
 
 // 
 init();

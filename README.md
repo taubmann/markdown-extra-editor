@@ -1,6 +1,6 @@
 # Markdown-Extra Editor
 
-	ver. 0.6.1
+	ver. 0.6.2
 
 Based on a 
 [JavaScript port](//github.com/tanakahisateru/js-markdown-extra) 

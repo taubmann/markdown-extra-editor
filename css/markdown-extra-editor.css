@@ -1,0 +1,115 @@
+/**	
+* Markdown-Extra Editor
+* Copyright (c) 2013 Christoph Taubmann
+* Licensed under the MIT License
+* http://www.opensource.org/licenses/mit-license.php
+*/
+
+body {
+	font-family: sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+
+.mee {
+
+}
+.mee_input, .mee_preview {
+	width: 48%;
+	border: 1px solid #000;
+	float:left;
+	height: 200px;
+}
+.mee_input {
+	clear: both;
+}
+.mee_preview {
+	overflow: auto;
+}
+
+
+
+.mee_mode_preview .mee_preview { width: 97%; }
+.mee_mode_preview .mee_input { display: none; }
+
+.mee_mode_editor .mee_preview { display: none; }
+.mee_mode_editor .mee_input { width: 97%; }
+
+/* show Menu-Item not in xx-Mode */
+.mee_mode_preview .np{display:none;}
+.mee_mode_editor .ne{display:none;}
+
+/* css-dropdown */
+.mee_menu li {
+    float: left;
+    cursor: pointer;
+    position: relative;
+    margin: 3px;
+    display: block;
+    padding: 5px;
+    color: #333;
+    background: #eee;
+}
+.mee_menu li:hover {
+	background: #ccc;
+}
+.mee_menu ul {
+	position: absolute;
+	list-style: none;
+	top: 27px;
+	left: -9999px;
+}
+.mee_menu li:hover ul {
+	left: -30px;
+	padding-top: 1px;
+}
+
+.mee_select {
+	font-size: 1.3em;
+	min-width: 80%;
+	float: left;
+}
+
+/* Table of Contents */
+div.mee_tocdiv {
+	position: fixed;
+	border: 1px solid #333;
+	top: 50px;
+	right: 10px;
+	padding: 10px;
+	background: #fff;
+	z-index: 2;
+}
+div.mee_tocdiv a {
+    color: #000;
+    text-decoration: none;
+    display: list-item;
+    font-size: 70%;
+    margin-left: 1em;
+    margin-top: 5px;
+}
+div.mee_tocdiv a.indH2 {margin-left: 2em;}
+div.mee_tocdiv a.indH3 {margin-left: 3em;}
+div.mee_tocdiv a.indH4 {margin-left: 4em;}
+div.mee_tocdiv a.indH5 {margin-left: 5em;}
+
+/* Styles for the Preview */
+.mee_preview {
+	font-size: .8em;
+}
+
+.mee_preview .icon-comment {
+	color: #eee;
+	font-size: .8em;
+	cursor: help;
+}
+.footnotes{
+	font-size: .8em;
+}
+
+pre {
+	margin-left: 2em;
+	padding: 1em;
+	border: 1px dashed #ccc;
+}

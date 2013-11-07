@@ -1,6 +1,6 @@
 # Markdown-Extra Editor
 
-	ver. 0.6.2
+	ver. 0.8.2
 
 Based on a 
 [JavaScript port](//github.com/tanakahisateru/js-markdown-extra) 
@@ -14,12 +14,13 @@ With Support for Footnotes, Tables Abbreviations etc. Markdown-Extra is a perfec
 ### Features
 
 * Fast even on long Documents (by deactivating auto-transcoding)
-* plain Vanilla-JS (even faster)
+* works on Mobile Devices
+* plain Vanilla-JS (faster than using Libs)
 * Auto-Indentation / Auto-Completition for Lists, Tabs, ... (i missed that!)
 * switchable Split-Window (Editor | HTML-Preview | both) 
-* "Table of Contents" in Preview
+* "Table of Contents" in Preview for some Elements (Headings, Comments, Quotes, ...)
 * synchronized scrolling
-* HTML-Comments are shown as Tool-tip <!--i like to comment my Texts -->
+* HTML-Comments are shown as Tooltip <!-- i like to comment my texts -->
 * easy extendible (simple to understand)
 
 ### Why?
@@ -28,17 +29,17 @@ With Support for Footnotes, Tables Abbreviations etc. Markdown-Extra is a perfec
 
 * Markdown is beautiful and easily to understand
 * WYSIWYM is way more suitable for distraction-free writing (don’t waste time formatting your text while writing)
-* no Incompatibilities between strange file formats from strange companies
+* no Incompatibilities between strange file formats from strange companies ;-)
 
 *[WYSIWYM]: "What you see is what you mean"
 
 #### Why use your Browser as Editor?
 
+* edit online-Texts (Editor integrated in a CMS)
 * Spellcheck on Textareas is integrated
 * also usable as Offline-Editor (see Tips) and saving online possible
 * mostly your Browser is open anyway ;-)
 * no additional Installation required
-
 
 ### Credits
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	
+	<title>Fullscreen Editor</title>
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+	<link rel="icon" type="image/png" href="css/edit.png" />
+	
+	<!-- optional include Font-Icons for the Menu -->
+	<link rel="stylesheet" type="text/css" href="font/css/fontello.css" />
+	<!-- CSS for the Editor -->
+	<link rel="stylesheet" type="text/css" href="css/markdown-extra-editor.css" />
+	<!-- if you want a Print-Preview use this -->
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+	
+	<style>
+	/* CSS just for this Page */
+	html {
+		height: 100%;
+	}
+	body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+	}
+	#myWrapper{
+		margin: auto;
+		width: 99%;
+		height: 99%;
+	}
+	</style>
+</head>
+<body>
+<div id="myWrapper">
+	<textarea></textarea>
+</div>
+<!-- include 2 Javascript-Files -->
+<script src="js/js-markdown-extra.js"></script>
+<script src="js/markdown-extra-editor.js"></script>
+
+<script>
+
+	// initialize Markdown Extra Editor
+	var x = new mee;
+		x.init('myWrapper');
+</script>
+</body>
+</html>

@@ -27,24 +27,26 @@
 		this.timeout = null;
 		this.containerid = id;
 		this.container = d.getElementById(id);
+		// get the height of the container and substract space of menu
+		var ch = this.container.clientHeight - 50;
 		
 		this.live = true;
-		
 		this.touch = ('ontouchstart' in d.documentElement);
+		
 		if (opts)
 		{
 			for (e in opts) this.options[e] = opts[e];
 		}
+		
 		this.container.className = 'mee_container '+(this.touch?'editor':'both');
 		
 		// create+append teh menu
 		this.container.appendChild(this[this.touch ? 'buildMenuSelect':'buildMenu'](this.options.menu, true));
 		
-		var t = this.container.getElementsByTagName('textarea');
-		this.ta = (t[0]) ? t[0] : d.createElement('TEXTAREA');
-		
-		//this.ta = d.createElement('TEXTAREA');
+		var at = this.container.getElementsByTagName('textarea');
+		this.ta = (at[0]) ? at[0] : d.createElement('TEXTAREA');
 		this.ta.className = 'mee_input';
+		this.ta.style.height = ch + 'px';
 		
 		that.ta.onkeydown = function(e)
 		{
@@ -102,15 +104,15 @@
 			
 		};//onkeydown END
 		
-		this.ta.onscroll = function(){ that.pv.scrollTop = this.scrollTop }
-		
 		this.container.appendChild(this.ta);
 		
 		this.pv = d.createElement('DIV');
 		this.pv.className = 'mee_preview';
-		
+		this.pv.style.height = ch + 'px';
 		this.container.appendChild(this.pv);
 		
+		// register listener for scroll-synchronization
+		that.ta.onscroll = function(){ that.pv.scrollTop = this.scrollTop }
 		
 		that.transfer(that);
 	};//init END

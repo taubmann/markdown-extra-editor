@@ -7,11 +7,11 @@
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<link rel="icon" type="image/png" href="css/edit.png" />
 	
-	<link rel="stylesheet" type="text/css" href="font/fontawesome.css" />
+	<link rel="stylesheet" type="text/css" href="font/css/fontello.css" />
 	<link rel="stylesheet" type="text/css" href="css/markdown-extra-editor.css" />
 	
 	<style>
-	#bla {
+	#myWrapper, #myWrapper2 {
 		width:600px;
 		height:400px;
 		border: 1px solid #f00;
@@ -20,8 +20,12 @@
 </head>
 <body>
 
-<div id="bla">
-<textarea></textarea>
+<div id="myWrapper">
+	<textarea></textarea>
+</div>
+
+<div id="myWrapper2">
+	<textarea></textarea>
 </div>
 
 <script src="js/js-markdown-extra.js"></script>
@@ -44,8 +48,10 @@ var o = {
 }*/
 
 var x = new mee;
-	x.init('bla');
-	
+	x.init('myWrapper');
+
+var y = new mee;
+	y.init('myWrapper2');
 </script>
 </body>
 </html>

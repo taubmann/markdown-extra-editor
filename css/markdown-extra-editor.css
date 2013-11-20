@@ -13,7 +13,7 @@ body {
 
 
 .mee {
-
+	position: relative;
 }
 .mee_input, .mee_preview {
 	width: 48%;
@@ -28,8 +28,7 @@ body {
 	overflow: auto;
 }
 
-
-
+/* toggle the size of the Areas */
 .mee_mode_preview .mee_preview { width: 97%; }
 .mee_mode_preview .mee_input { display: none; }
 
@@ -45,14 +44,22 @@ body {
     float: left;
     cursor: pointer;
     position: relative;
-    margin: 3px;
+    margin: 0px;
     display: block;
     padding: 5px;
     color: #333;
-    background: #eee;
+    background: #fff;
+	border: 1px solid #ccc;
+	
+}
+.mee_menu>li:last-child {
+	border-radius: 0 5px 5px 0;
+}
+.mee_menu>li:first-child {
+	border-radius: 5px 0 0 5px;
 }
 .mee_menu li:hover {
-	background: #ccc;
+	color: #aaa;
 }
 .mee_menu ul {
 	position: absolute;
@@ -99,16 +106,16 @@ div.mee_tocdiv a.indH5 {margin-left: 5em;}
 	font-size: .8em;
 }
 
-.mee_preview .icon-comment {
+.mee_preview .ui-icon-comment {
 	color: #eee;
 	font-size: .8em;
 	cursor: help;
 }
-.footnotes{
+.mee_preview .footnotes{
 	font-size: .8em;
 }
 
-pre {
+.mee_preview pre {
 	margin-left: 2em;
 	padding: 1em;
 	border: 1px dashed #ccc;

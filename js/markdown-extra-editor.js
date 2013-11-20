@@ -4,11 +4,18 @@
 * Licensed under the MIT License
 * http://www.opensource.org/licenses/mit-license.php
 */
+
 (function(w, d, undefined)
 {
-
-	w.mee = function(){};
-
+	/**
+	* define a global Object "mee" (Markdown Extra Editor)
+	*/
+	if (!w.mee) w.mee = function(){};
+	/**
+	* initialize the current Editor
+	* @param {String} id of the current HTML-Container
+	* @param {Object} Options to customize Settings
+	*/
 	mee.prototype.init = function (id, opts)
 	{
 		var that = this;
@@ -24,14 +31,14 @@
 		this.live = true;
 		
 		this.touch = ('ontouchstart' in d.documentElement);
-		if(opts)
+		if (opts)
 		{
 			for (e in opts) this.options[e] = opts[e];
 		}
 		this.container.className = 'mee_container '+(this.touch?'editor':'both');
 		
 		// create+append teh menu
-		this.container.appendChild(this[this.touch?'buildMenuSelect':'buildMenu'](this.options.menu, true));
+		this.container.appendChild(this[this.touch ? 'buildMenuSelect':'buildMenu'](this.options.menu, true));
 		
 		var t = this.container.getElementsByTagName('textarea');
 		this.ta = (t[0]) ? t[0] : d.createElement('TEXTAREA');
@@ -42,7 +49,7 @@
 		that.ta.onkeydown = function(e)
 		{
 			
-			switch(e.keyCode)
+			switch (e.keyCode)
 			{
 				case 9: // tab: insert tab
 					e.preventDefault();
@@ -87,52 +94,54 @@
 					}
 				break;
 			};
-			// alert(e.keyCode)
+			// alert(e.keyCode)// uncomment to test for new KeyCodes
 			
 			// delay transfer by 1.5 sec
-			if(that.timeout != null) w.clearTimeout(that.timeout);
+			if (that.timeout != null) w.clearTimeout(that.timeout);
 			that.timeout = w.setTimeout(function(){that.transfer(that)}, 1500);
 			
 		};//onkeydown END
 		
 		this.ta.onscroll = function(){ that.pv.scrollTop = this.scrollTop }
 		
-
-		//this.ta.setAttribute('style','width:48%;height:50%;float:left');
 		this.container.appendChild(this.ta);
 		
 		this.pv = d.createElement('DIV');
 		this.pv.className = 'mee_preview';
 		
-		//this.pv.onscroll = function(){ that.ta.scrollTop = this.scrollTop }
-		//this.pv.setAttribute('style','width:49%;height:50%;border:1px solid #000;float:left');
 		this.container.appendChild(this.pv);
 		
 		
 		that.transfer(that);
 	};//init END
-
-
-	// create the Menu as unordered List
+	/**
+	* create the Menu as unordered List
+	* @param {Object} Menu-Structure as JS-Object
+	* @param {Bool} Flag set to true at first call (Root-Node)
+	*/
 	mee.prototype.buildMenu = function(nodes, start)
 	{
 		var ul = d.createElement('UL');
-		if(start) ul.className = 'mee_menu';
+		if (start) ul.className = 'mee_menu';
 		for (var i=0,j=nodes.length; i<j; ++i)
 		{
 			ul.appendChild(this.buildMenuItem(nodes[i]));
 		}
 		return ul;
 	};
+	/**
+	* create Menu-Items as LI-tags
+	* @param {Object} (Sub)Node(s) to define List-Item [+ Child-Branches]
+	*/
 	mee.prototype.buildMenuItem = function(node)
 	{
 		var that = this;
 		var li = document.createElement('LI');
 			li.title = node.title;
 			
-			if(node.icon && node.icon.length>2)
+			if (node.icon && node.icon.length>2)
 			{
-				li.className = 'icon-'+node.icon;
+				li.className = 'ui-icon-'+node.icon;
 			}
 			else
 			{
@@ -140,20 +149,26 @@
 				li.className = node.icon;
 			}
 			
-			if(node.func)
+			if (node.func)
 			{
 				li.onclick = function()
 				{
-					// add the Objet to the Parameter-Array
+					// add the Object to the Parameter-Array
 					node.params.unshift(that);
 					that[node.func].apply(this, node.params);
 				}
 			}
-			if(node.sub) li.appendChild(this.buildMenu(node.sub));
+			if (node.sub)
+			{
+				li.appendChild(this.buildMenu(node.sub, false));
+			}
 		return li;
 	};
-	
-	// create the Menu as Select-List
+	/**
+	* create the Menu as Select-List
+	* @param {Object} Menu-Structure as JS-Object
+	* @param {Bool} Flag set to true at first call (Root-Node)
+	*/
 	mee.prototype.buildMenuSelect = function(nodes, start)
 	{
 		this.menuFunctions = {};
@@ -176,6 +191,11 @@
 		}
 		return this.sel;
 	};
+	/**
+	* create Options for Select-List
+	* @param {Object} (Sub)Node(s) to define Options/Optgroups 
+	* @param {Number} Counter to build a Reference from Values to Action-Holder (menuFunctions)
+	*/
 	mee.prototype.buildMenuOption = function(node, no)
 	{
 		if (node.sub)
@@ -193,7 +213,7 @@
 			var o = document.createElement('OPTION');
 				o.innerHTML = node.title;
 				
-				if(node.func)
+				if (node.func)
 				{
 					o.value = no;
 					this.menuFunctions[no] = {};
@@ -207,11 +227,17 @@
 			return o;
 		}
 	};
-	
-	// wrap formatting around selected Text
+	/**
+	* wrap Formatting around selected Text
+	* @param {Object} Reference to this Instance
+	* @param {String} Code to insert before selected String
+	* @param {String} Code to insert after selected String
+	* @param {Bool} Flag to format multiple Lines
+	* @param {Number} Offset to place the Cursor if Selection is empty
+	*/
 	mee.prototype.format = function(obj, before, after, multiline, offset)
 	{
-		
+		obj.ta.focus();
 		var s = obj.ta.selectionStart, 
 			e = obj.ta.selectionEnd,
 			v = obj.ta.value,
@@ -236,17 +262,20 @@
 		obj.ta.setSelectionRange(pos, pos);
 		
 	};
-
+	/**
+	* build Markdown-Code for a Table
+	* @param {Object} Reference to this Instance
+	*/
 	mee.prototype.insertTable = function(obj)
 	{
-		var cols = prompt('how many columns do you need?','3'),
-			rows = prompt('how many rows do you need?','3');
+		var cols = prompt(obj.options.labels.q_columns,'3'),
+			rows = prompt(obj.options.labels.q_rows,'3');
 		var rh = [], rl = [], rb = [];
 		for (i=0,j=parseInt(cols); i<j; ++i)
 		{
-			rh.push('Header        ');
+			rh.push(obj.options.labels.t_header);
 			rl.push('--------------');
-			rb.push(' Cell Content ');
+			rb.push(obj.options.labels.t_cell);
 		}
 		var str = "\n" + rh.join('|') + "\n" + rl.join('|');
 		for (i=0,j=parseInt(rows); i<j; ++i)
@@ -255,40 +284,49 @@
 		}
 		obj.format(obj, '', str);
 	};
-
-	// transcode Markdown to HTML
+	/**
+	* transcode Markdown to HTML shown in Preview
+	* @param {Object} Reference to this Instance
+	* @param {Bool} enforce transcoding (eg. at startup)
+	*/
 	mee.prototype.transfer = function(obj, enforce)
 	{
 		
 		if (!obj.live) return;
 		var v = obj.ta.value;
 		
-		if (enforce) obj.pv.innerHTML = '<b>regenerate Markdown, please wait...</b>';
+		if (enforce) obj.pv.innerHTML = '<b>'+obj.options.labels.regen_markup+'</b>';
 		
 		// if the Text is too big we should deactivate "background-transcoding"
 		if (!enforce && v.length>(obj.touch?2000:10000)) return;
 		var html = Markdown(v);
 		
 		// encode html-comments as bubbles
-		if(obj.showComments) html = html.replace(/<!--(.*)-->/g, '<span class="icon-comment" title="$1"></span>');
+		if (obj.showComments) html = html.replace(/<!--(.*)-->/g, '<span class="ui-icon-comment" title="$1"></span>');
 		obj.pv.innerHTML = html;
 	};
-
+	/**
+	* Toggle Editor-Mode
+	* @param {Object} Reference to this Instance 
+	* @param {String} Mode to activate ('both', 'preview', 'edit')
+	*/
 	mee.prototype.toggleScreens = function(obj, to)
 	{
 		obj.container.className = 'mee_container mee_mode_'+to;
 		obj.live = (to=='both');
 		if (to=='preview') obj.buildToc(obj,['h1','h2','h3','h4','h5']);
 	};
-	
-	
-
-	// create table of contents inspired by: http://www.quirksmode.org/js/contents.html
+	/**
+	* create Table of Contents inspired by: http://www.quirksmode.org/js/contents.html
+	* @param {Object} Reference to this Instance
+	* @param {Array} Tags/Properties to search for
+	*/
 	mee.prototype.buildToc = function(obj, tags)
 	{
 		
 		var res  = [];
 		obj.transfer(obj);
+		
 		
 		for (var i=0, j=tags.length; i<j; ++i)
 		{
@@ -300,6 +338,7 @@
 		}
 		var testNode = res[0];
 		if (!testNode) return [];
+		
 		if (testNode.sourceIndex)
 		{
 			res.sort (function (a,b)
@@ -320,6 +359,7 @@
 			
 			var y = document.createElement('div');
 				y.className = 'mee_tocdiv';
+				y.style.left = obj.pv.getBoundingClientRect().right+'px';
 				y.innerHTML = '<i onclick="this.parentNode.style.display=\'none\'" style="float:right;cursor:pointer">&otimes;</i>';
 			
 			for (var i=0,j=res.length; i<j; ++i)
@@ -333,6 +373,7 @@
 					tmp.innerHTML = ih.substring(0,30);
 					y.appendChild(tmp);
 					tmp.className += ' ind'+res[i].nodeName;
+				
 				var headerId = res[i].id || 'mee_tocref' + i;
 					tmp.href = '#' + headerId;
 					res[i].id = headerId;
@@ -340,7 +381,10 @@
 			obj.pv.appendChild(y);
 		}
 	};
-	
+	/**
+	* 
+	* @param {Object} Reference to this Instance
+	*/
 	mee.prototype.showSource = function(obj)
 	{
 		var p = document.createElement('pre');
@@ -349,26 +393,34 @@
 		obj.pv.appendChild(p);
 	};
 
-///////////////////// Options ///////////////////////
+/////////////////////  ///////////////////////
 
-// to manage it easily just copy&paste the JSON to/from      http://jsoneditoronline.org
-
+// to manage it easily just copy&paste the JSON to http://jsoneditoronline.org
+/**
+* Options
+* 
+*/
 mee.prototype.options = {
 
 menu:
 // Menu-JSON BEGIN
 
-[{"title":"Heading","icon":"np","sub":[{"title":"H1","func":"format","params":["# ",""]},{"title":"H2","func":"format","params":["## ",""]},{"title":"H3","func":"format","params":["### ",""]},{"title":"H4","func":"format","params":["#### ",""]},{"title":"H5","func":"format","params":["##### ",""]}]},{"title":"Edit-Mode","sub":[{"title":"dual-column-Mode (ctrl+2)","icon":"columns","func":"toggleScreens","params":["both"]},{"title":"editing-Mode (ctrl+1)","icon":"edit","func":"toggleScreens","params":["editor"]},{"title":"preview-Mode","icon":"eye-open","func":"toggleScreens","params":["preview"]}]},{"title":"format Bold (ctrl+b)","icon":"bold np","func":"format","params":["**","**"]},{"title":"format Italic (ctrl+i)","icon":"italic np","func":"format","params":["*","*"]},{"title":"unordered List","icon":"list-ul np","func":"format","params":["* ","","true"]},{"title":"ordered List","icon":"list-ol np","func":"format","params":["1. ","","true"]},{"title":"indent 4 Spaces","icon":"indent-right np","func":"format","params":["    ","","true"]},{"title":"insert Table","icon":"table","func":"insertTable","params":["true"]},{"title":"remove Formatting","icon":"ban-circle np","func":"format","params":["","","true"]},{"title":"show Source","icon":"paper-clip ne","func":"showSource","params":["true"]},{"title":"ToC","icon":"ne","sub":[{"title":"Headings","func":"buildToc","params":[["h1","h2"]]},{"title":"Comments","func":"buildToc","params":[["span.icon-comment"]]},{"title":"Quotes","func":"buildToc","params":[["code"]]}]}]
+[{"title":"Heading","icon":"np","sub":[{"title":"H1","func":"format","params":["# ",""]},{"title":"H2","func":"format","params":["## ",""]},{"title":"H3","func":"format","params":["### ",""]},{"title":"H4","func":"format","params":["#### ",""]},{"title":"H5","func":"format","params":["##### ",""]}]},{"title":"Edit-Mode","sub":[{"title":"dual-column-Mode (ctrl+2)","icon":"columns","func":"toggleScreens","params":["both"]},{"title":"editing-Mode (ctrl+1)","icon":"edit","func":"toggleScreens","params":["editor"]},{"title":"preview-Mode","icon":"eye","func":"toggleScreens","params":["preview"]}]},{"title":"format Bold (ctrl+b)","icon":"bold np","func":"format","params":["**","**"]},{"title":"format Italic (ctrl+i)","icon":"italic np","func":"format","params":["*","*"]},{"title":"unordered List","icon":"list-bullet np","func":"format","params":["* ","","true"]},{"title":"ordered List","icon":"list-numbered np","func":"format","params":["1. ","","true"]},{"title":"indent 4 Spaces","icon":"indent-right np","func":"format","params":["    ","","true"]},{"title":"insert Table","icon":"table","func":"insertTable","params":["true"]},{"title":"remove Formatting","icon":"eraser np","func":"format","params":["","","true"]},{"title":"show Source","icon":"code ne","func":"showSource","params":["true"]},{"title":"ToC","icon":"ne","sub":[{"title":"Headings","func":"buildToc","params":[["h1","h2"]]},{"title":"Comments","func":"buildToc","params":[["span.icon-comment"]]},{"title":"Quotes","func":"buildToc","params":[["code"]]}]}]
 
 // Menu-JSON END
 
-// Language-Labels
+// Language-Labels BEGIN
 ,labels:
 
 {
-	"dada": "dsaf"
+	"regen_markup": "regenerate Markdown, please wait",
+	"q_columns":"how many columns do you need",
+	"q_rows":"how many rows do you need",
+	"t_header":"Header",
+	"t_cell":"Cell Content",
+	"":""
 }
-
+// Language-Labels END
 }// options END
 
 })( window, document );

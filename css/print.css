@@ -1,2 +1,3 @@
-#output { width: 100%; height:100%; border: 0px none; }
-#input, #menu { display: none; }
+/* Markdown-Extra Editor: show only HTML-Preview for Printing */
+.mee_preview { width: 100%; height:100%; border: 0px none; }
+.mee_input, .mee_menu { display: none; }

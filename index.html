@@ -7,10 +7,20 @@
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<link rel="icon" type="image/png" href="css/edit.png" />
 	
+	<!-- optional include Font-Icons for the Menu -->
 	<link rel="stylesheet" type="text/css" href="font/css/fontello.css" />
+	<!-- CSS for the Editor -->
 	<link rel="stylesheet" type="text/css" href="css/markdown-extra-editor.css" />
+	<!-- if you want a Print-Preview use this -->
+	<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
 	
 	<style>
+	/* just for this Page */
+	body {
+		font-family: sans-serif;
+		padding: 0;
+		margin: 0;
+	}
 	#myWrapper, #myWrapper2 {
 		width:600px;
 		height:400px;
@@ -20,38 +30,28 @@
 </head>
 <body>
 
+<!-- textarea within the wrapper is used as input (= non-js-fallback) -->
 <div id="myWrapper">
 	<textarea></textarea>
 </div>
 
-<div id="myWrapper2">
-	<textarea></textarea>
-</div>
+<!-- automagically created a textarea on wrappers without one -->
+<div id="myWrapper2"></div>
 
+
+<!-- include 2 Javascript-Files -->
 <script src="js/js-markdown-extra.js"></script>
 <script src="js/markdown-extra-editor.js"></script>
+
 <script>
-	/*
-var o = {
-	menu: [
-			{
-			class: 'da',
-			title: 'hauptibaupti',
-			nodes: [
-				{
-					class: 'dort',
-					title: 'unter',
-					click: 'alert(pv)'
-				}
-			]}
-		]
-}*/
 
-var x = new mee;
-	x.init('myWrapper');
+	// initialize Markdown Extra Editor
+	var x = new mee;
+		x.init('myWrapper');
 
-var y = new mee;
-	y.init('myWrapper2');
+	var y = new mee;
+		y.init('myWrapper2');
+
 </script>
 </body>
 </html>

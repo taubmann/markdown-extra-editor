@@ -6,7 +6,7 @@ Based on a
 [JavaScript port](https://github.com/tanakahisateru/js-markdown-extra) 
 of 
 [PHP Markdown Extra](http://michelf.ca/projects/php-markdown/extra) 
-this Editor provides a lean Interface to Edit your 
+this Editor provides a lean Interface to edit your 
 [Markdown](http://daringfireball.net/projects/markdown)-Documents. 
 
 With Support for Footnotes, Tables, Abbreviations etc. Markdown-Extra is a perfect choice to write even scientific Texts.
@@ -15,31 +15,31 @@ With Support for Footnotes, Tables, Abbreviations etc. Markdown-Extra is a perfe
 
 * switchable Split-Window (Editor | HTML-Preview | both)
 * Fast even on long Documents (by deactivating auto-transcoding at some length)
-* works on Mobile Devices
+* works on Mobile Devices too
 * plain Vanilla-JS (faster than using Libs)
 * Auto-Indentation / Auto-Completition for Lists, Tabs, ... (i missed that!)
 * "Table of Contents" in Preview for customizable Elements (Headings, Comments, Quotes, ...)
 * synchronized scrolling
 * HTML-Comments are shown as Tooltip <!-- i like to comment my texts -->
-* easy extendible (simple to understand) and embeddable in your Web-Apps
+* easy extendible (simple to understand) and embeddable in your Web-Apps (multiple Editors in one Page)
 
 ### Why?
 
 #### Why  Markdown?
 
 * Markdown is beautiful and easily to understand
-* WYSIWYM is way more suitable for distraction-free writing (don’t waste time formatting your text while writing)
+* WYSIWYM is way more suitable for distraction-free writing (don’t waste time formatting your texts while writing)
 * no Incompatibilities between strange file formats from strange companies ;-)
 
 *[WYSIWYM]: "What you see is what you mean"
 
 #### Why use your Browser as Editor?
 
-* to edit Online-Texts without downloading (Editor integrated in a CMS)
-* Spellcheck on Textareas is integrated
-* Browser is also usable as an Offline-Editor (see Tips) and saving online possible
+* to edit Online-Texts without downloading/uploading Files (Editor can be integrated in your CMS)
+* Spellcheck on Textareas is integrated in most Browsers
+* some Browsers are also usable as an Offline-Editor (see Tips) while saving online is still possible
 * your Browser is open anyway ;-)
-* no additional Installation required
+* no additional Installation required. Use it everywhere
 
 ### Credits
 
@@ -60,6 +60,6 @@ With Support for Footnotes, Tables, Abbreviations etc. Markdown-Extra is a perfe
 
 * Javascript must be activated
 * IE less than 9 is (will) not be supported
-* atm JS-Markdown-Extra is based on PHP Markdown Extra 1.2.5, so some fancy new Markup are missing
+* atm JS-Markdown-Extra is based on PHP Markdown Extra 1.2.5, so Support for some fancy new Markup is missing
 
 

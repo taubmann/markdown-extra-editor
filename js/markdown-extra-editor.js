@@ -27,8 +27,7 @@
 		this.timeout = null;
 		this.containerid = id;
 		this.container = d.getElementById(id);
-		// get the height of the container and substract space of menu
-		var ch = this.container.clientHeight - 50;
+		
 		
 		this.live = true;
 		this.touch = ('ontouchstart' in d.documentElement);
@@ -37,10 +36,12 @@
 		{
 			for (e in opts) this.options[e] = opts[e];
 		}
+		// get the height of the container and substract space of menu (default 50px)
+		var ch = this.container.clientHeight - (this.options['menuheight'] || 50);
 		
 		this.container.className = 'mee_container '+(this.touch?'editor':'both');
 		
-		// create+append teh menu
+		// create+append the menu
 		this.container.appendChild(this[this.touch ? 'buildMenuSelect':'buildMenu'](this.options.menu, true));
 		
 		var at = this.container.getElementsByTagName('textarea');
@@ -148,16 +149,20 @@
 			else
 			{
 				li.innerHTML = node.title;
-				li.className = node.icon;
+				li.className = node.icon || '';
 			}
 			
 			if (node.func)
 			{
+				
+				
 				li.onclick = function()
 				{
-					// add the Object to the Parameter-Array
-					node.params.unshift(that);
-					that[node.func].apply(this, node.params);
+					// clone the array
+					var a = node.params.slice(0);
+						// add the Object to the Parameter-Array
+						a.unshift(that);
+					that[node.func].apply(this, a);
 				}
 			}
 			if (node.sub)
@@ -306,6 +311,7 @@
 		// encode html-comments as bubbles
 		if (obj.showComments) html = html.replace(/<!--(.*)-->/g, '<span class="ui-icon-comment" title="$1"></span>');
 		obj.pv.innerHTML = html;
+		return true;
 	};
 	/**
 	* Toggle Editor-Mode
@@ -323,16 +329,15 @@
 	* @param {Object} Reference to this Instance
 	* @param {Array} Tags/Properties to search for
 	*/
-	mee.prototype.buildToc = function(obj, tags)
+	mee.prototype.buildToc = function(obj, tagList)
 	{
 		
 		var res  = [];
 		obj.transfer(obj);
 		
-		
-		for (var i=0, j=tags.length; i<j; ++i)
+		for (var i=0, j=tagList.length; i<j; ++i)
 		{
-			var els = document.querySelectorAll('#'+obj.containerid+' .mee_preview '+tags[i]);
+			var els = document.querySelectorAll('#'+obj.containerid+' > .mee_preview '+tagList[i]);
 			for (var k=0,l=els.length; k<l; ++k)
 			{
 				res.push(els[k]);
@@ -359,9 +364,10 @@
 		if (res.length > 0)
 		{
 			
-			var y = document.createElement('div');
+			var r = obj.pv.getBoundingClientRect();
+			var y = document.createElement('DIV');
 				y.className = 'mee_tocdiv';
-				y.style.left = obj.pv.getBoundingClientRect().right+'px';
+				y.setAttribute('style','opacity:0.5;top:'+r.top+'px;left:'+(r.right-r.width/2)+'px;width:'+(r.width/2)+'px;');
 				y.innerHTML = '<i onclick="this.parentNode.style.display=\'none\'" style="float:right;cursor:pointer">&otimes;</i>';
 			
 			for (var i=0,j=res.length; i<j; ++i)
@@ -376,9 +382,9 @@
 					y.appendChild(tmp);
 					tmp.className += ' ind'+res[i].nodeName;
 				
-				var headerId = res[i].id || 'mee_tocref' + i;
-					tmp.href = '#' + headerId;
-					res[i].id = headerId;
+				var refId = res[i].id || obj.containerid+'tocref' + i;
+					tmp.href = '#' + refId;
+					res[i].id = refId;
 			}
 			obj.pv.appendChild(y);
 		}
@@ -395,12 +401,9 @@
 		obj.pv.appendChild(p);
 	};
 
-/////////////////////  ///////////////////////
-
-// to manage it easily just copy&paste the JSON to http://jsoneditoronline.org
 /**
-* Options
-* 
+* default Options
+* to manage them just copy&paste the JSON to http://jsoneditoronline.org
 */
 mee.prototype.options = {
 
@@ -423,6 +426,7 @@ menu:
 	"":""
 }
 // Language-Labels END
-}// options END
+
+}// Options END
 
 })( window, document );

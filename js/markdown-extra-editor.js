@@ -92,7 +92,9 @@
 						if(e.keyCode==72){ that.transfer(that,true); e.preventDefault(); }// h => regenerate HTML-Output
 						if(e.keyCode==49){ that.toggleScreens('editor');e.preventDefault(); }// 1 => show Editor-Mode
 						if(e.keyCode==50){ that.toggleScreens('both');e.preventDefault(); }// 2 => show Splitscreen-Mode
-						
+						if(e.keyCode==38){ that.moveLine(that,-1);e.preventDefault(); }// move Line up
+						if(e.keyCode==40){ that.moveLine(that, 1);e.preventDefault(); }// move Line down
+						// alert(e.keyCode);e.preventDefault();// uncomment to test for new KeyCodes
 						that.ctrl = false; // reset ctrl-Listener
 					}
 				break;
@@ -117,6 +119,29 @@
 		
 		that.transfer(that);
 	};//init END
+	/**
+	* move selected Line up or down
+	* @param {Object} Menu-Structure as JS-Object
+	* @param {Number} -1/1 for up/down
+	*/
+	mee.prototype.moveLine = function(obj, dir)
+	{
+		obj.ta.focus();
+		var p = obj.ta.selectionStart,
+			s = obj.ta.value,
+			a0 = s.substring(0,p).split("\n"),
+			a1 = s.substring(p).split("\n")
+			l0 = a0.pop(),
+			ln = l0 + a1.shift();
+		
+		var a2 = a0.concat(a1),
+			ix = a0.length+dir,
+			l1 = a2.slice(0,ix).join("\n").length + l0.length + 1;
+			a2.splice(ix, 0, ln);
+		
+		obj.ta.value = a2.join("\n");
+		obj.ta.setSelectionRange(l1, l1);
+	};
 	/**
 	* create the Menu as unordered List
 	* @param {Object} Menu-Structure as JS-Object
@@ -154,7 +179,6 @@
 			
 			if (node.func)
 			{
-				
 				
 				li.onclick = function()
 				{
@@ -410,7 +434,7 @@ mee.prototype.options = {
 menu:
 // Menu-JSON BEGIN
 
-[{"title":"Heading","icon":"np","sub":[{"title":"H1","func":"format","params":["# ",""]},{"title":"H2","func":"format","params":["## ",""]},{"title":"H3","func":"format","params":["### ",""]},{"title":"H4","func":"format","params":["#### ",""]},{"title":"H5","func":"format","params":["##### ",""]}]},{"title":"Edit-Mode","sub":[{"title":"dual-column-Mode (ctrl+2)","icon":"columns","func":"toggleScreens","params":["both"]},{"title":"editing-Mode (ctrl+1)","icon":"edit","func":"toggleScreens","params":["editor"]},{"title":"preview-Mode","icon":"eye","func":"toggleScreens","params":["preview"]}]},{"title":"format Bold (ctrl+b)","icon":"bold np","func":"format","params":["**","**"]},{"title":"format Italic (ctrl+i)","icon":"italic np","func":"format","params":["*","*"]},{"title":"unordered List","icon":"list-bullet np","func":"format","params":["* ","","true"]},{"title":"ordered List","icon":"list-numbered np","func":"format","params":["1. ","","true"]},{"title":"indent 4 Spaces","icon":"indent-right np","func":"format","params":["    ","","true"]},{"title":"insert Table","icon":"table","func":"insertTable","params":["true"]},{"title":"remove Formatting","icon":"eraser np","func":"format","params":["","","true"]},{"title":"show Source","icon":"code ne","func":"showSource","params":["true"]},{"title":"ToC","icon":"ne","sub":[{"title":"Headings","func":"buildToc","params":[["h1","h2"]]},{"title":"Comments","func":"buildToc","params":[["span.icon-comment"]]},{"title":"Quotes","func":"buildToc","params":[["code"]]}]}]
+[{"title":"Heading","icon":"np","sub":[{"title":"H1","func":"format","params":["# ",""]},{"title":"H2","func":"format","params":["## ",""]},{"title":"H3","func":"format","params":["### ",""]},{"title":"H4","func":"format","params":["#### ",""]},{"title":"H5","func":"format","params":["##### ",""]}]},{"title":"Edit-Mode","sub":[{"title":"dual-column-Mode (ctrl+2)","icon":"columns","func":"toggleScreens","params":["both"]},{"title":"editing-Mode (ctrl+1)","icon":"edit","func":"toggleScreens","params":["editor"]},{"title":"preview-Mode","icon":"eye","func":"toggleScreens","params":["preview"]}]},{"title":"format Bold (ctrl+b)","icon":"bold np","func":"format","params":["**","**"]},{"title":"format Italic (ctrl+i)","icon":"italic np","func":"format","params":["*","*"]},{"title":"unordered List","icon":"list-bullet np","func":"format","params":["* ","","true"]},{"title":"ordered List","icon":"list-numbered np","func":"format","params":["1. ","","true"]},{"title":"indent 4 Spaces","icon":"indent-right np","func":"format","params":["    ","","true"]},{"title":"insert Table","icon":"table","func":"insertTable","params":["true"]},{"title":"remove Formatting","icon":"eraser np","func":"format","params":["","","true"]},{"title":"show Source","icon":"code ne","func":"showSource","params":["true"]},{"title":"ToC","icon":"ne","sub":[{"title":"Headings","func":"buildToc","params":[["h1","h2","h3","h4"]]},{"title":"Comments","func":"buildToc","params":[["span.icon-comment"]]},{"title":"Quotes","func":"buildToc","params":[["code"]]}]}]
 
 // Menu-JSON END
 
